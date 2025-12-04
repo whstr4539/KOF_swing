@@ -10,7 +10,7 @@ public class Character {
     public static final boolean LEFT = true;
     public static final boolean RIGHT = false;
 
-    private String name;//角色名字
+    private String name;//玩家名字
 
     private int HP = 5;//血量
 

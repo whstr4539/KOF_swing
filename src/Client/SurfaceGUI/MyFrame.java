@@ -43,6 +43,9 @@ public class MyFrame extends JFrame {
     private Music mainBgm;//背景音乐
 
     private boolean isFinish;//游戏是否结束
+    
+    // 添加是否按下Shift键的标志
+    private boolean isShiftPressed = false;
 
     public MyFrame(int playerNumber,BufferedReader in, PrintStream out,Socket socket) {
         super("GAME"+ playerNumber);
@@ -183,7 +186,7 @@ public class MyFrame extends JFrame {
             while(true) {
                 surface.repaint();
                 try {
-                    Thread.sleep(30);//设别帧数：15 -> 60FPS
+                    Thread.sleep(20);//设别帧数：15 -> 60FPS
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -202,7 +205,7 @@ public class MyFrame extends JFrame {
 
             //加载背景
             Toolkit tk =Toolkit.getDefaultToolkit();
-            Image backGround = tk.getImage(Character.class.getClassLoader().getResource("images/background.png"));//加载背景
+            Image backGround = tk.getImage(Character.class.getClassLoader().getResource("images/background2.png"));//加载背景
             g.drawImage(backGround,0,0,backGround.getWidth(null),backGround.getHeight(null),null);
 
             //加载状态栏
@@ -238,13 +241,13 @@ public class MyFrame extends JFrame {
                 }
                 
                 // 绘制碰撞箱和攻击箱边框（调试用）
-                myFighter.getHitbox().drawBounds(g);
+                /*myFighter.getHitbox().drawBounds(g);
                 myFighter.getLeftAttackBox().drawBounds(g);
                 myFighter.getRightAttackBox().drawBounds(g);
                 
                 serverFighter.getHitbox().drawBounds(g);
                 serverFighter.getLeftAttackBox().drawBounds(g);
-                serverFighter.getRightAttackBox().drawBounds(g);
+                serverFighter.getRightAttackBox().drawBounds(g);*/
             }
 
             //判断输赢
@@ -329,13 +332,30 @@ public class MyFrame extends JFrame {
                 if(currentDir == Character.LEFT) fighter.getDir().LD = true;
                 else fighter.getDir().RD = true;
                 break;
+            case KeyEvent.VK_SHIFT:
+                isShiftPressed = true;
+                break;
             case KeyEvent.VK_A:
                 fighter.getDir().setCurrentDir(Character.RIGHT);//保存当前方向
-                fighter.getDir().RF = true;
+                if (isShiftPressed) {
+                    // Shift+A：快速向左移动
+                    fighter.getDir().DASH_LEFT = true;
+                    fighter.getDir().LS = false;
+                    fighter.getDir().RS = false;
+                } else {
+                    fighter.getDir().RF = true;
+                }
                 break;
             case KeyEvent.VK_D:
                 fighter.getDir().setCurrentDir(Character.LEFT);//保存当前方向
-                fighter.getDir().LF = true;
+                if (isShiftPressed) {
+                    // Shift+D：快速向右移动
+                    fighter.getDir().DASH_RIGHT = true;
+                    fighter.getDir().LS = false;
+                    fighter.getDir().RS = false;
+                } else {
+                    fighter.getDir().LF = true;
+                }
                 break;
             case KeyEvent.VK_J:
                 // 检查攻击冷却时间
@@ -439,12 +459,20 @@ public class MyFrame extends JFrame {
                 break;
             case KeyEvent.VK_A:
                 fighter.getDir().RF = false;
+                fighter.getDir().DASH_LEFT = false;
                 break;
             case KeyEvent.VK_D:
                 fighter.getDir().LF = false;
+                fighter.getDir().DASH_RIGHT = false;
                 break;
             case KeyEvent.VK_L:
                 fighter.getDir().DEFEND = false;
+                break;
+            case KeyEvent.VK_SHIFT:
+                isShiftPressed = false;
+                // 松开Shift键时，确保快速移动状态被清除
+                fighter.getDir().DASH_LEFT = false;
+                fighter.getDir().DASH_RIGHT = false;
                 break;
 
         }

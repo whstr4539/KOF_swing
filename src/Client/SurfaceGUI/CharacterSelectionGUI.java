@@ -1,6 +1,7 @@
 package Client.SurfaceGUI;
 
 import Client.Advance.ImageButton;
+import Client.Advance.Music;
 import Client.Character.Character;
 
 import javax.swing.*;
@@ -25,6 +26,9 @@ public class CharacterSelectionGUI extends JFrame {
     private ImageButton confirmButton;
     private ImageButton backButton;
     
+    // 音乐
+    private Music readyBgm; // 角色选择界面音乐
+    
     public CharacterSelectionGUI(int playerNumber, boolean isOfflineMode) {
         this.playerNumber = playerNumber;
         this.isOfflineMode = isOfflineMode;
@@ -32,6 +36,10 @@ public class CharacterSelectionGUI extends JFrame {
         
         // 初始化角色信息
         loadCharacters();
+        
+        // 启动角色选择界面音乐
+        readyBgm = new Music("bgm.mp3", Music.LOOP);
+        readyBgm.start();
         
         setTitle("选择角色");
         setSize(840, 520);
@@ -231,6 +239,10 @@ public class CharacterSelectionGUI extends JFrame {
      * 开始游戏
      */
     private void startGame() {
+        // 停止角色选择界面音乐
+        if (readyBgm != null) {
+            readyBgm.stopMusic();
+        }
         dispose(); // 关闭当前窗口
         
         if (isOfflineMode) {
@@ -246,6 +258,10 @@ public class CharacterSelectionGUI extends JFrame {
      * 返回主菜单
      */
     private void backToMainMenu() {
+        // 停止角色选择界面音乐
+        if (readyBgm != null) {
+            readyBgm.stopMusic();
+        }
         dispose(); // 关闭当前窗口
         BeginGUI beginGUI = new BeginGUI(); // 重新打开主菜单
     }
@@ -261,7 +277,7 @@ public class CharacterSelectionGUI extends JFrame {
                 super.paintComponent(g);
                 // 加载背景图像
                 try {
-                    URL imageUrl = null;//Character.class.getClassLoader().getResource("images/background3.png");
+                    URL imageUrl = Character.class.getClassLoader().getResource("images/background2.png");
                     if (imageUrl != null) {
                         Image backgroundImage = Toolkit.getDefaultToolkit().getImage(imageUrl);
                         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);

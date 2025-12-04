@@ -82,8 +82,8 @@ public class Dir {
                 setCurrentMovement(getMoveMap().get("RS"));
             }
         } else if(FALL) {//如果检测被击倒
-            if(getCurrentDir() == Character.LEFT) setCurrentMovement(getMoveMap().get("LH"));//如果LA为真，则触发攻击动作
-            else  setCurrentMovement(getMoveMap().get("RH"));
+            if(getCurrentDir() == Character.LEFT) setCurrentMovement(getMoveMap().get("LS"));
+            else  setCurrentMovement(getMoveMap().get("RS"));
         } else if(DASH_LEFT) {
             // 快速向左移动时显示专门的快速移动动作
             setCurrentMovement(getMoveMap().get("L_DASH"));

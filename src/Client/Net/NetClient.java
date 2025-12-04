@@ -30,7 +30,9 @@ public class NetClient {
             System.out.println("Client: Connected.");
 
             try {
-                b.getBgm().interrupt();
+                if (b.getBgm() != null) {
+                    b.getBgm().stopMusic();
+                }
             } catch (NullPointerException e) {
                 System.out.println("没有bgm");
             }

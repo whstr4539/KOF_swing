@@ -32,6 +32,10 @@ public class MyFrameOffline extends JFrame {
     private JLabel victoryLabel;
     // 失败图像标签
     private JLabel defeatLabel;
+    
+    // 音乐
+    private Music readyBgm; // 游戏准备音效
+    private Music mainBgm; // 游戏进行中的背景音乐
 
     public MyFrameOffline(int playerNumber) {
         this(playerNumber, "images/cao"); // 默认使用cao角色
@@ -64,6 +68,32 @@ public class MyFrameOffline extends JFrame {
         
         // 初始化AI控制器
         aiController = new AIController(aiFighter, playerFighter);
+        
+        // 启动游戏音乐
+        readyBgm = new Music("ready.mp3", Music.ONCE);
+        readyBgm.start();
+        mainBgm = new Music("gaming.mp3", Music.LOOP);
+        mainBgm.start();
+        
+        // 游戏结束时的ko音效监听线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.println("");//为啥去掉就无法进入if语句？
+
+                    if(isFinish) {
+                        //结束音效
+                        System.out.println("@finished!@");
+
+                        mainBgm.stopMusic();
+                        Music koBgm = new Music("ko.mp3", Music.ONCE);
+                        koBgm.start();
+                        break;
+                    }
+                }
+            }
+        }).start();
         
         launchFrame();
         
@@ -179,7 +209,7 @@ public class MyFrameOffline extends JFrame {
              while(!isFinish) {
                  surface.repaint();
                  try {
-                     Thread.sleep(15);//设备帧数：15 -> 60FPS
+                     Thread.sleep(20);//设备帧数：15 -> 60FPS
                  } catch (InterruptedException e) {
                      e.printStackTrace();
                      break;
@@ -244,7 +274,7 @@ public class MyFrameOffline extends JFrame {
                 }
                 
                 // 绘制碰撞箱和攻击箱边框（调试用）
-                playerFighter.getHitbox().drawBounds(g);
+                /*playerFighter.getHitbox().drawBounds(g);
                 playerFighter.getLeftAttackBox().drawBounds(g);
                 playerFighter.getRightAttackBox().drawBounds(g);
                 playerFighter.getLeftKickBox().drawBounds(g);
@@ -254,7 +284,7 @@ public class MyFrameOffline extends JFrame {
                 aiFighter.getLeftAttackBox().drawBounds(g);
                 aiFighter.getRightAttackBox().drawBounds(g);
                 aiFighter.getLeftKickBox().drawBounds(g);
-                aiFighter.getRightKickBox().drawBounds(g);
+                aiFighter.getRightKickBox().drawBounds(g);*/
             }
             
             //判断输赢
@@ -638,6 +668,14 @@ public class MyFrameOffline extends JFrame {
         // 停止AI控制器线程
         if (aiController != null) {
             aiController.stop();
+        }
+        
+        // 停止音乐
+        if (readyBgm != null) {
+            readyBgm.stopMusic();
+        }
+        if (mainBgm != null) {
+            mainBgm.stopMusic();
         }
         
         // 设置游戏结束标志，使paintThread退出循环

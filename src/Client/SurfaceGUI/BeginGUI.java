@@ -61,6 +61,10 @@ public class BeginGUI extends JFrame {
         offlineButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // 停止开始界面音乐
+                if (bgm != null) {
+                    bgm.stopMusic();
+                }
                 // 启动单机模式 - 打开角色选择界面
                 dispose();
                 // 创建角色选择界面
@@ -74,7 +78,11 @@ public class BeginGUI extends JFrame {
         onlineButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // 停止开始界面音乐
+                if (bgm != null) {
+                    bgm.stopMusic();
+                }
+                
                 try{
                     NetClient nc = new NetClient(BeginGUI.this);
                     dispose();
