@@ -48,8 +48,8 @@ public class CharacterSelectionGUI extends JFrame {
      */
     private void loadCharacters() {
         // 添加角色信息
-        characters.add(new CharacterInfo("cao", "images/cao"));
-        characters.add(new CharacterInfo("Chris", "images/Chris"));
+        characters.add(new CharacterInfo("cao", "images/cao","cao：擅长操控火焰技能，攻击范围广、爆发力强，是正面输出的好手"));
+        characters.add(new CharacterInfo("Chris", "images/Chris","Chris：掌握魔法能量，技能附带控制效果，生存能力出色，适合持续作战"));
         // 可以根据需要添加更多角色
     }
     
@@ -151,12 +151,35 @@ public class CharacterSelectionGUI extends JFrame {
         }
         
         // 角色名称
-        JLabel nameLabel = new JLabel(character.getName(), JLabel.CENTER);
+        panel.add(avatarLabel, BorderLayout.CENTER);
+
+        JPanel nameBtnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        nameBtnPanel.setOpaque(false); // 透明背景，适配黑色界面
+
+        JLabel nameLabel = new JLabel(character.getName());
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
-        
-        panel.add(avatarLabel, BorderLayout.CENTER);
-        panel.add(nameLabel, BorderLayout.SOUTH);
+        nameBtnPanel.add(nameLabel);
+
+        JButton introBtn = new JButton("角色介绍");
+        introBtn.setForeground(Color.WHITE);
+        introBtn.setBackground(new Color(60, 60, 60)); // 深色背景适配界面
+        introBtn.setFocusPainted(false); // 去掉焦点边框
+
+        introBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(
+                        CharacterSelectionGUI.this,
+                        character.getDescription(), // 显示角色介绍文本
+                        character.getName() + " 角色详情", // 弹窗标题
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        });
+        nameBtnPanel.add(introBtn);
+
+        panel.add(nameBtnPanel, BorderLayout.SOUTH);
         
         // 添加点击事件
         panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -264,10 +287,12 @@ public class CharacterSelectionGUI extends JFrame {
     private static class CharacterInfo {
         private String name;
         private String path;
+        private String description;
         
-        public CharacterInfo(String name, String path) {
+        public CharacterInfo(String name, String path,String description) {
             this.name = name;
             this.path = path;
+            this.description = description;
         }
         
         public String getName() {
@@ -276,6 +301,10 @@ public class CharacterSelectionGUI extends JFrame {
         
         public String getPath() {
             return path;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 }
