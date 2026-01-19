@@ -80,8 +80,6 @@ public class MyFrameOffline extends JFrame {
             @Override
             public void run() {
                 while (true) {
-                    System.out.println("");//为啥去掉就无法进入if语句？
-
                     if(isFinish) {
                         //结束音效
                         System.out.println("@finished!@");
@@ -90,6 +88,12 @@ public class MyFrameOffline extends JFrame {
                         Music koBgm = new Music("ko.mp3", Music.ONCE);
                         koBgm.start();
                         break;
+                    }
+                    // 添加适当延迟，减少CPU占用
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -629,7 +633,7 @@ public class MyFrameOffline extends JFrame {
         private void performAttack() {
             // 检查攻击冷却时间
             if (!aiFighter.canAttack()) {
-                System.out.println("AI攻击冷却中");
+                //System.out.println("AI攻击冷却中");
                 return;
             }
             
@@ -638,7 +642,7 @@ public class MyFrameOffline extends JFrame {
             
             // 执行攻击
             aiFighter.getDir().A = true;
-            System.out.println("AI开始攻击");
+            //System.out.println("AI开始攻击");
             
             // 检查攻击是否命中
             if (Character.isAttacked(aiFighter, playerFighter)) {

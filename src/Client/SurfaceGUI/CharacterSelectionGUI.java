@@ -56,8 +56,8 @@ public class CharacterSelectionGUI extends JFrame {
      */
     private void loadCharacters() {
         // 添加角色信息
-        characters.add(new CharacterInfo("cao", "images/cao","cao：擅长操控火焰技能，攻击范围广、爆发力强，是正面输出的好手"));
-        characters.add(new CharacterInfo("Chris", "images/Chris","Chris：掌握魔法能量，技能附带控制效果，生存能力出色，适合持续作战"));
+        characters.add(new CharacterInfo("cao", "images/cao","草薙京：擅长操控火焰技能，攻击范围广、爆发力强，是正面输出的好手"));
+        characters.add(new CharacterInfo("Chris", "images/Chris","克里斯：掌握魔法能量，技能附带控制效果，生存能力出色，适合持续作战"));
         // 可以根据需要添加更多角色
     }
     
